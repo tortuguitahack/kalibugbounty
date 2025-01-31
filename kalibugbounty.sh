@@ -51,10 +51,17 @@ if ! apt-get autoremove -y; then
     exit 1
 fi
 
+# Función para instalar múltiples paquetes
+install_packages() {
+    local packages=("$@")
+    for package in "${packages[@]}"; do
+        log "Instalando $package..."
+        install_package "$package"
+    done
+}
+
 # Listas de paquetes para instalar
 declare -a essentials=(git curl wget build-essential)
-
-# Herramientas de reconocimiento
 declare -a recon_tools=(
     "nmap"
     "masscan"
@@ -73,8 +80,6 @@ declare -a recon_tools=(
     "dirsearch"
     "gowitness"
 )
-
-# Herramientas de explotación
 declare -a exploitation_tools=(
     "metasploit-framework"
     "sqlmap"
@@ -87,8 +92,6 @@ declare -a exploitation_tools=(
     "crackmapexec"
     "responder"
 )
-
-# Herramientas de gestión de vulnerabilidades
 declare -a vuln_management_tools=(
     "nikto"
     "openvas"
@@ -96,23 +99,17 @@ declare -a vuln_management_tools=(
     "burpsuite"
     "zap"
 )
-
-# Herramientas de generación de informes
 declare -a reporting_tools=(
     "reportlab"
     "libreoffice"
     "markdown"
     "pandoc"
 )
-
-# Herramientas que requieren API keys
 declare -a api_tools=(
     "shodan"
     "censys"
     "virustotal-cli"
 )
-
-# Herramientas para Android
 declare -a android_tools=(
     "apktool"
     "dex2jar"
@@ -121,8 +118,6 @@ declare -a android_tools=(
     "androguard"
     "mobSF"
 )
-
-# Herramientas para iOS
 declare -a ios_tools=(
     "frida"
     "objection"
@@ -131,61 +126,30 @@ declare -a ios_tools=(
     "needle"
 )
 
-# Instalar paquetes esenciales
+# Instalar todos los paquetes y herramientas
 log "Instalando paquetes esenciales..."
-for package in "${essentials[@]}"; do
-    log "Instalando $package..."
-    install_package "$package"
-done
+install_packages "${essentials[@]}"
 
-# Instalar herramientas de reconocimiento
 log "Instalando herramientas de reconocimiento..."
-for tool in "${recon_tools[@]}"; do
-    log "Instalando $tool..."
-    install_package "$tool"
-done
+install_packages "${recon_tools[@]}"
 
-# Instalar herramientas de explotación
 log "Instalando herramientas de explotación..."
-for tool in "${exploitation_tools[@]}"; do
-    log "Instalando $tool..."
-    install_package "$tool"
-done
+install_packages "${exploitation_tools[@]}"
 
-# Instalar herramientas de gestión de vulnerabilidades
 log "Instalando herramientas de gestión de vulnerabilidades..."
-for tool in "${vuln_management_tools[@]}"; do
-    log "Instalando $tool..."
-    install_package "$tool"
-done
+install_packages "${vuln_management_tools[@]}"
 
-# Instalar herramientas de generación de informes
 log "Instalando herramientas de generación de informes..."
-for tool in "${reporting_tools[@]}"; do
-    log "Instalando $tool..."
-    install_package "$tool"
-done
+install_packages "${reporting_tools[@]}"
 
-# Instalar herramientas que requieren API keys
 log "Instalando herramientas que requieren API keys..."
-for tool in "${api_tools[@]}"; do
-    log "Instalando $tool..."
-    install_package "$tool"
-done
+install_packages "${api_tools[@]}"
 
-# Instalar herramientas para Android
 log "Instalando herramientas para Android..."
-for tool in "${android_tools[@]}"; do
-    log "Instalando $tool..."
-    install_package "$tool"
-done
+install_packages "${android_tools[@]}"
 
-# Instalar herramientas para iOS
 log "Instalando herramientas para iOS..."
-for tool in "${ios_tools[@]}"; do
-    log "Instalando $tool..."
-    install_package "$tool"
-done
+install_packages "${ios_tools[@]}"
 
 # Configuración adicional para herramientas específicas
 log "Configurando herramientas adicionales..."
